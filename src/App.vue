@@ -1,30 +1,48 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-2 g-4 pt-4 pb-4">
+      <div class="col" v-for="post in posts">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{ post.body }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import { faker } from '@faker-js/faker'
+
+export default {
+  name: "App",
+  components: {
+    faker
+  },
+  data() {
+    return {
+      posts: []
+    }
+  },
+  methods: {
+    createPosts() {
+      Array.from({length: 10}).forEach(() => {
+        this.posts.push(this.createPost())
+      })
+    },
+    createPost() {
+      return {
+        id: faker.datatype.uuid(),
+        title: faker.company.companyName(),
+        body: faker.lorem.paragraph(2)
+      }
+    }
+  },
+  mounted() {
+    this.createPosts()
+  }
 }
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+</script>
