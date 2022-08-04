@@ -1,26 +1,30 @@
 import {createRouter, createWebHashHistory} from "vue-router"
-import App from "@/App";
 import TodoPage from "@/pages/TodoPage";
 import PostsPage from "@/pages/PostsPage";
+import HomePage from "@/pages/HomePage";
 
 const routes = [
     {
         path: '/',
-        component: App
+        name: 'home',
+        component: HomePage
     },
-    // {
-    //     path: '/todos',
-    //     component: TodoPage
-    // },
+    {
+        path: '/todos',
+        name: 'todos',
+        component: TodoPage
+    },
     {
         path: '/posts',
+        name: 'posts',
         component: PostsPage
     }
 ]
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes
+    routes,
+    linkActiveClass: 'active'
 })
 
 export default router
