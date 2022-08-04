@@ -3,6 +3,11 @@
     <div class="card-body">
       <h5 class="card-title">{{ post.title }}</h5>
       <p class="card-text">{{ post.body }}</p>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-danger" @click="deletePost">
+          Delete
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -13,6 +18,11 @@ export default {
     post: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    deletePost() {
+      this.$emit('deletePost', this.post)
     }
   }
 }

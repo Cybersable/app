@@ -3,7 +3,7 @@
     :createFakePost="createFakePost"
     @addNewPost="addNewPost"
   />
-  <PostList :posts="posts"/>
+  <PostList :posts="posts" @deletePost="deletePost"/>
 </template>
 
 <script>
@@ -38,6 +38,9 @@ export default {
     },
     addNewPost(newPost) {
       this.posts.push({...newPost})
+    },
+    deletePost(post) {
+      this.posts = this.posts.filter(p => p.id !== post.id)
     }
   },
   mounted() {
