@@ -31,7 +31,7 @@ export default {
     },
     createFakePost() {
       return {
-        id: faker.datatype.uuid(),
+        id: faker.database.mongodbObjectId(),
         title: faker.company.companyName(),
         body: faker.lorem.paragraph(2)
       }

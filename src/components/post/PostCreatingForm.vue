@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     clearNewPost() {
-      this.newPost.id = faker.datatype.uuid()
+      this.newPost.id = faker.database.mongodbObjectId()
       this.newPost.title = this.newPost.body = ''
     },
     fillFakedData() {
