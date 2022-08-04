@@ -9,11 +9,11 @@
             </legend>
             <div class="mb-3">
               <label for="postTitle" class="form-label">Title</label>
-              <input v-model="newPost.title" type="text" class="form-control" id="postTitle">
+              <input v-model.trim="newPost.title" type="text" class="form-control" id="postTitle">
             </div>
             <div class="mb-3">
               <label for="postBody" class="form-label">Description</label>
-              <input v-model="newPost.body" type="text" class="form-control" id="postBody">
+              <input v-model.trim="newPost.body" type="text" class="form-control" id="postBody">
             </div>
             <button type="button" @click="clearNewPost" class="btn btn-danger me-3">Clear</button>
             <button type="button" @click="fillFakedData" class="btn btn-primary me-3">Fill faked data</button>
