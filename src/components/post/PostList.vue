@@ -1,18 +1,23 @@
 <template>
   <div class="my-4">
-    <template v-if="posts.length > 0">
-      <h3>Posts list</h3>
-      <div class="row row-cols-1 row-cols-md-2 g-4 pt-4 pb-4">
+    <h3 class="mb-4">Posts list</h3>
+    <input
+        class="form-control"
+        placeholder="Searching by title"
+        v-model.trim="searchQuery"
+    >
+    <div class="row row-cols-1 row-cols-md-2 g-4 my-2">
+      <template v-if="posts.length > 0">
         <transition-group name="post-list">
           <div class="col" v-for="post in posts" :key="post.id">
             <PostItem :post="post" @deletePost="$emit('deletePost', post)" />
           </div>
         </transition-group>
-      </div>
-    </template>
-    <template v-else>
-      <h3>Post list is empty</h3>
-    </template>
+      </template>
+      <template v-else>
+        <p>Post list is empty</p>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -26,7 +31,20 @@ export default {
       required: true
     }
   },
-  emits: ['deletePost']
+  data() {
+    return {
+      searchQuery: '',
+    }
+  },
+  emits: ['deletePost', 'search'],
+  watch: {
+    searchQuery(newValue) {
+      if (newValue.length > 2)
+        this.$emit('search', this.searchQuery)
+      else
+        this.$emit('search', '')
+    }
+  }
 }
 </script>
 

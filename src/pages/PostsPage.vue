@@ -3,7 +3,11 @@
     :createFakePost="createFakePost"
     @addNewPost="addNewPost"
   />
-  <PostList :posts="posts" @deletePost="deletePost"/>
+  <PostList
+    :posts="searchedPosts"
+    @deletePost="deletePost"
+    @search="search"
+  />
 </template>
 
 <script>
@@ -20,6 +24,7 @@ export default {
   },
   data() {
     return {
+      query: '',
       posts: []
     }
   },
@@ -41,6 +46,14 @@ export default {
     },
     deletePost(post) {
       this.posts = this.posts.filter(p => p.id !== post.id)
+    },
+    search(query) {
+      this.query = query
+    }
+  },
+  computed: {
+    searchedPosts() {
+      return this.posts.filter(post => post.title.includes(this.query))
     }
   },
   mounted() {
