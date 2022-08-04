@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     searchedPosts() {
-      return this.posts.filter(post => post.title.includes(this.query))
+      return this.posts.filter(post => post.title.toLowerCase().includes(this.query.toLowerCase()))
     }
   },
   mounted() {
