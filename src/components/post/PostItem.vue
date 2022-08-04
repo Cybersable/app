@@ -5,7 +5,7 @@
       <p class="card-text">{{ post.body }}</p>
       <div class="d-flex justify-content-end">
         <AppModalDialogTriggerBtn
-          :id="post.id.slice(0,5)"
+          :id="'id' + post.id"
           :class="'btn-danger'"
         >
           Delete
@@ -13,7 +13,7 @@
       </div>
     </div>
   </div>
-  <AppModalDialog :id="post.id.slice(0,5)" @approve="deletePost">
+  <AppModalDialog :id="'id' + post.id" @approve="deletePost">
     <template v-slot:title>
       Deleting post: {{ post.title }}
     </template>
