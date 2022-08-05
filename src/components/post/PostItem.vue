@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" @click="openPost">
     <div class="card-body">
       <h5 class="card-title">{{ post.title }}</h5>
       <p class="card-text">{{ post.body }}</p>
@@ -41,6 +41,9 @@ export default {
   methods: {
     deletePost() {
       this.$emit('deletePost', this.post)
+    },
+    openPost() {
+      this.$router.push({name: 'post', params: {id: this.post.id}})
     }
   }
 }
