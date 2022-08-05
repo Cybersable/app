@@ -3,7 +3,7 @@
     Vue 3 App Todo Page
   </h2>
   <TodoList :todos="todos" />
-  <div ref="observer" class="observer"></div>
+  <div v-intersection="loadNextPage" class="observer"></div>
 </template>
 
 <script>
@@ -22,6 +22,12 @@ export default {
     }
   },
   methods: {
+    loadNextPage() {
+      if (this.page < this.totalPage) {
+        this.page++
+        this.fetchTodoList()
+      }
+    },
     async fetchTodoList() {
       try {
         const response = await axios.get('https://jsonplaceholder.typicode.com/todos', {
@@ -39,24 +45,6 @@ export default {
   },
   mounted() {
     this.fetchTodoList()
-
-    const options = {
-      rootMargin: '0px',
-      threshold: 1.0
-    }
-    const callback = (entries, observer) => {
-      console.log('test')
-      if (entries[0].isIntersecting && this.page < this.totalPage) {
-        this.page++
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer)
-  },
-  watch: {
-    page() {
-      this.fetchTodoList()
-    }
   }
 }
 </script>
