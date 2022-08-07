@@ -30,7 +30,7 @@
 import {faker} from "@faker-js/faker";
 
 export default {
-  props: ["createFakePost"],
+  props: ["PostCreatingForm"],
   data() {
     return {
       newPost: {

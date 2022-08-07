@@ -1,63 +1,44 @@
 <template>
-  <CreatingPostForm
-    :createFakePost="createFakePost"
-    @addNewPost="addNewPost"
-  />
-  <PostList
-    :posts="searchedPosts"
-    @deletePost="deletePost"
-    @search="search"
-  />
+  <h2>Posts List</h2>
+  <template v-if="isLoading">
+    Loading ...
+  </template>
+  <template v-else>
+    <PostList :posts="posts" />
+  </template>
 </template>
 
 <script>
-
-import CreatingPostForm from "@/components/post/PostCreatingForm";
 import PostList from "@/components/post/PostList";
-import {faker} from "@faker-js/faker";
+import {mapState} from 'vuex'
 
 export default {
   components: {
-    CreatingPostForm,
-    PostList,
-    faker
+    PostList
   },
   data() {
     return {
       query: '',
-      posts: []
+      page: 1,
+      limit: 10
     }
   },
   methods: {
-    createFakePosts() {
-      Array.from({length: 10}).forEach(() => {
-        this.posts.push(this.createFakePost())
-      })
-    },
-    createFakePost() {
-      return {
-        id: faker.database.mongodbObjectId(),
-        title: faker.company.companyName(),
-        body: faker.lorem.paragraph(2)
-      }
-    },
-    addNewPost(newPost) {
-      this.posts.push({...newPost})
-    },
-    deletePost(post) {
-      this.posts = this.posts.filter(p => p.id !== post.id)
-    },
-    search(query) {
-      this.query = query
+    getPosts() {
+      this.$store.dispatch('post/getPosts', {page: this.page, limit: this.limit})
     }
   },
   computed: {
-    searchedPosts() {
-      return this.posts.filter(post => post.title.toLowerCase().includes(this.query.toLowerCase()))
+    ...mapState('post', {
+      postsIsLoading: state => state.isLoading,
+      posts: state => state.posts
+    }),
+    isLoading() {
+      return this.postsIsLoading
     }
   },
   mounted() {
-    this.createFakePosts()
+    this.getPosts()
   }
 }
 </script>

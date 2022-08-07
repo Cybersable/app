@@ -1,15 +1,15 @@
 <template>
   <div
     class="modal fade"
-    :id="id"
+    id="modalDialog"
     tabindex="-1"
-    :aria-labelledby="id + 'Label'"
+    aria-labelledby="modalDialogLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" :id="id + 'Label'">
+          <h5 class="modal-title" id="modalDialogLabel">
             <slot name="title"></slot>
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -42,12 +42,6 @@
 <script>
 export default {
   name: "AppModalDialog",
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  },
   emits: ['approve']
 }
 </script>

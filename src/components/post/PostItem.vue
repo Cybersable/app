@@ -1,11 +1,14 @@
 <template>
-  <div class="card" @click="openPost">
+  <div class="card">
     <div class="card-body">
       <h5 class="card-title">{{ post.title }}</h5>
       <p class="card-text">{{ post.body }}</p>
-      <div class="d-flex justify-content-end">
+      <div class="d-flex justify-content-between">
+        <button class="btn btn-primary" @click="openPost">
+          Open
+        </button>
         <AppModalDialogTriggerBtn
-          :id="'id' + post.id"
+          @click="setModalDialog"
           :class="'btn-danger'"
         >
           Delete
@@ -13,23 +16,15 @@
       </div>
     </div>
   </div>
-  <AppModalDialog :id="'id' + post.id" @approve="deletePost">
-    <template v-slot:title>
-      Deleting post: {{ post.title }}
-    </template>
-    <template v-slot:body>
-      Are you really want to delete this post?
-    </template>
-  </AppModalDialog>
 </template>
 
 <script>
 import AppModalDialogTriggerBtn from "@/components/UI/modalDialog/AppModalDialogTriggerBtn";
-import AppModalDialog from "@/components/UI/modalDialog/AppModalDialog";
+import {mapState} from "vuex";
+
 export default {
   components: {
-    AppModalDialogTriggerBtn,
-    AppModalDialog
+    AppModalDialogTriggerBtn
   },
   props: {
     post: {
@@ -37,13 +32,34 @@ export default {
       required: true
     }
   },
-  emits: ['deletePost'],
   methods: {
-    deletePost() {
-      this.$emit('deletePost', this.post)
-    },
     openPost() {
       this.$router.push({name: 'post', params: {id: this.post.id}})
+    },
+    setModalDialog() {
+      this.$store.dispatch('modalDialog/setModalDialog', {
+        entity: 'post',
+        entityId: this.post.id,
+        title: "Deleting post: " + this.post.title,
+        body: "Are you really want to delete this post?"
+      })
+    }
+  },
+  computed: {
+    ...mapState('modalDialog', {
+      modalDialogEntity: state => state.entity,
+      modalDialogEntityId: state => state.entityId,
+      modalDialogApprove: state => state.approved
+    })
+  },
+  watch: {
+    modalDialogApprove(newVal) {
+      if (newVal && this.modalDialogEntity === 'post') {
+        this.$store.dispatch('modalDialog/disApprove')
+        this.$store.dispatch('post/deletePost', {
+          id: this.modalDialogEntityId
+        })
+      }
     }
   }
 }

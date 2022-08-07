@@ -3,7 +3,7 @@
     type="button"
     class="btn"
     data-bs-toggle="modal"
-    :data-bs-target="'#' + id"
+    :data-bs-target="'#modalDialog'"
   >
     <slot></slot>
   </button>
@@ -12,11 +12,5 @@
 <script>
 export default {
   name: "AppModalDialogTriggerBtn",
-  props: {
-    id: {
-      type: String,
-      required: true
-    }
-  }
 }
 </script>
