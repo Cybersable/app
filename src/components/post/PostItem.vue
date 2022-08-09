@@ -8,7 +8,7 @@
           Open
         </button>
         <AppModalDialogTriggerBtn
-          @click="setModalDialog"
+          @click="setModalDialogProps"
           :class="'btn-danger'"
         >
           Delete
@@ -20,9 +20,10 @@
 
 <script>
 import AppModalDialogTriggerBtn from "@/components/UI/modalDialog/AppModalDialogTriggerBtn";
-import {mapState} from "vuex";
+import modalDialogMixin from "@/mixins/modalDialogMixin";
 
 export default {
+  mixins: [modalDialogMixin],
   components: {
     AppModalDialogTriggerBtn
   },
@@ -36,30 +37,18 @@ export default {
     openPost() {
       this.$router.push({name: 'post', params: {id: this.post.id}})
     },
-    setModalDialog() {
-      this.$store.dispatch('modalDialog/setModalDialog', {
+    setModalDialogProps() {
+      this.setModalDialog({
         entity: 'post',
         entityId: this.post.id,
-        title: "Deleting post: " + this.post.title,
-        body: "Are you really want to delete this post?"
+        title: this.post.title,
+        action: 'delete'
       })
-    }
-  },
-  computed: {
-    ...mapState('modalDialog', {
-      modalDialogEntity: state => state.entity,
-      modalDialogEntityId: state => state.entityId,
-      modalDialogApprove: state => state.approved
-    })
-  },
-  watch: {
-    modalDialogApprove(newVal) {
-      if (newVal && this.modalDialogEntity === 'post') {
-        this.$store.dispatch('modalDialog/disApprove')
-        this.$store.dispatch('post/deletePost', {
-          id: this.modalDialogEntityId
-        })
-      }
+    },
+    modalDialogApprovedAction() {
+      this.$store.dispatch('post/deletePost', {
+        id: this.post.id
+      })
     }
   }
 }

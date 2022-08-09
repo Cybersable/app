@@ -1,6 +1,6 @@
 <template>
   <h2>Posts List</h2>
-  <template v-if="isLoading">
+  <template v-if="isLoading && posts.length > 0">
     Loading ...
   </template>
   <template v-else>
@@ -10,35 +10,39 @@
 
 <script>
 import PostList from "@/components/post/PostList";
+import usePosts from "@/hooks/usePosts";
 import {mapState} from 'vuex'
 
 export default {
   components: {
     PostList
   },
-  data() {
-    return {
-      query: '',
-      page: 1,
-      limit: 10
+  props: {
+    page: {
+      type: Number,
+      default: 1
+    },
+    limit: {
+      type: Number,
+      default: 10
     }
   },
-  methods: {
-    getPosts() {
-      this.$store.dispatch('post/getPosts', {page: this.page, limit: this.limit})
+  setup(props) {
+    return {
+      ...usePosts({
+        limit: props.limit,
+        page: props.page
+      })
     }
   },
   computed: {
     ...mapState('post', {
-      postsIsLoading: state => state.isLoading,
-      posts: state => state.posts
+      posts: state => state.posts,
+      postsIsLoading: state => state.postIsLoading
     }),
     isLoading() {
       return this.postsIsLoading
     }
-  },
-  mounted() {
-    this.getPosts()
   }
 }
 </script>

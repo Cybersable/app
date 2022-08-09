@@ -48,6 +48,10 @@ const postModule = {
                 : commit('setPosts', resp.data)
             commit('setLoading', false)
         },
+        editPost({commit}, {post}) {
+            commit('deletePost', {id: post.id})
+            commit('addPost', post)
+        },
         deletePost({commit}, {id}) {
             commit('deletePost', {id})
         }
